@@ -1,0 +1,1 @@
+clang main.c -lm -lncurses -fsanitize=address -fno-omit-frame-pointer -Wall -o main
