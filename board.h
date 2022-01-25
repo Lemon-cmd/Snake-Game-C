@@ -58,30 +58,41 @@ void grow(struct Board *board, struct Snake *head)
 
 void move_snake(struct Board *board, struct Snake *snake, const int8_t dx, const int8_t dy)
 {
+    if (!(snake->size > 1 && check_move(snake, dx, dy)))
+    {
+        snake->dx = dx;
+        snake->dy = dy;
+    }
+
     unsigned int px = snake->head->x, py = snake->head->y;
-    snake->head->x += dx;
-    snake->head->y += dy;
+    snake->head->x += snake->dx;
+    snake->head->y += snake->dy;
+    board->screen[py][px] = '.';
 
     struct Body *head = snake->head;
+
     if (snake->size > 1)
     {
         head = head->next;
-
         struct Body *current;
-        while (head->next != NULL)
+        unsigned int nx, ny;
+
+        for (uint32_t j = 1; j < snake->size; j++)
         {
-            board->screen[py][px] = '.';
             current = head;
-            current->x = px;
-            current->y = py;
-            head = head->next;
-            px = head->x;
-            py = head->y;
+            nx = px, ny = py;
+
+            px = current->x;
+            py = current->y;
+
+            current->x = nx;
+            current->y = ny;
+
+            board->screen[py][px] = '.';
+
+            if (j < snake->size - 1)
+                head = head->next;
         }
-    }
-    else
-    {
-        board->screen[py][px] = '.';
     }
 }
 

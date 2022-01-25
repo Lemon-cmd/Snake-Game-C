@@ -22,8 +22,9 @@ struct Body
 
 struct Snake
 {
-    struct Body *head, *tail;
+    int8_t dx, dy;
     unsigned int size;
+    struct Body *head, *tail;
 };
 
 struct Body *make_body(const unsigned int y, const unsigned int x)
@@ -46,14 +47,14 @@ void add_body(struct Snake *snake, const unsigned int y, const unsigned int x)
     }
     else if (snake->size == 1)
     {
-        snake->head->next = new_body;
-        new_body->prev = snake->head;
         snake->tail = new_body;
+        snake->head->next = snake->tail;
+        snake->tail->prev = snake->head;
     }
     else
     {
-        new_body->prev = snake->tail;
         snake->tail->next = new_body;
+        new_body->prev = snake->tail;
         snake->tail = new_body;
     }
 
@@ -64,14 +65,34 @@ void display_snake(const struct Snake *snake)
 {
     struct Body *current = snake->head;
 
-    for (unsigned int j = 0; j < snake->size - 1; j++)
+    for (uint16_t j = 0; j < snake->size - 1; j++)
     {
-
-        printf("{%u, %u}, ", current->x, current->y);
+        printw("{%u, %u}, ", current->x, current->y);
         current = current->next;
     }
-    printf("{%u, %u}\n", current->x, current->y);
-    fflush(stdout);
+    printw("{%u, %u}\n", current->x, current->y);
+    refresh();
+}
+
+const bool check_move(struct Snake *snake, const int8_t dx, const int8_t dy)
+{
+    if (dx > 0 && snake->dx < 0)
+    {
+        return true;
+    }
+    else if (dx < 0 && snake->dx > 0)
+    {
+        return true;
+    }
+    else if (dy < 0 && snake->dy > 0)
+    {
+        return true;
+    }
+    else if (dy > 0 && snake->dy < 0)
+    {
+        return true;
+    }
+    return false;
 }
 
 void free_snake(struct Snake *snake)
