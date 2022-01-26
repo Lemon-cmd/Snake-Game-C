@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     init_snake(board, snake, 3);
 
     bool stop;
-    int ch, decay = 100;
+    int ch, decay = 10000;
     int8_t dx = 0, dy = 1;
 
     initscr();
