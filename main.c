@@ -2,16 +2,13 @@
 
 void init_snake(struct Board *board, struct Snake *snake, const uint8_t init_size)
 {
+    assert(board->width / 2 + init_size - 1 < board->width);
+
     snake->size = 0;
     snake->dx = 0, snake->dy = 0;
 
     for (uint8_t j = 0; j < init_size; j++)
     {
-        if (board->width / 2 + j > board->width)
-        {
-            break;
-        }
-
         add_body(snake, board->height / 2, board->width / 2 + j);
     }
 }
@@ -76,7 +73,7 @@ int main(int argc, char **argv)
 
         move_snake(board, snake, dx, dy);
 
-        usleep(200000 - decay * (snake->size - 3));
+        usleep(125000 - decay * (snake->size - 3));
         if (collide(board, snake->head))
         {
             stop = true;
