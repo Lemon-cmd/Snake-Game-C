@@ -66,7 +66,7 @@ void set_snake(const struct Board *board, const struct Snake *snake)
     unsigned int y, x;
     struct Body *current = snake->head;
 
-    for (unsigned int j = 0; j < snake->size; j++)
+    for (uint32_t j = 0; j < snake->size; j++)
     {
         y = current->y;
         x = current->x;
@@ -133,11 +133,11 @@ struct Board *set_board(const unsigned int height, const unsigned int width)
     board->food = (struct Origin *)malloc(sizeof(struct Origin));
     board->food->x = width / 2, board->food->y = height / 2 + 2;
 
-    for (unsigned int row = 0; row < height; row++)
+    for (uint32_t row = 0; row < height; row++)
     {
         board->screen[row] = (char *)calloc(width, sizeof(char));
 
-        for (unsigned int col = 0; col < width; col++)
+        for (uint32_t col = 0; col < width; col++)
         {
             board->screen[row][col] = '.';
         }
@@ -150,7 +150,7 @@ struct Board *set_board(const unsigned int height, const unsigned int width)
 
 void free_board(struct Board *board, struct Snake *snake)
 {
-    for (unsigned int row = 0; row < board->height; row++)
+    for (uint32_t row = 0; row < board->height; row++)
     {
         free(board->screen[row]);
     }
@@ -170,9 +170,9 @@ void display(const struct Board *board, struct Snake *snake)
     clear();
     set_snake(board, snake);
 
-    for (unsigned int row = 0; row < board->height; row++)
+    for (uint32_t row = 0; row < board->height; row++)
     {
-        for (unsigned int col = 0; col < board->width; col++)
+        for (uint32_t col = 0; col < board->width; col++)
         {
             printw("%c ", board->screen[row][col]);
         }
