@@ -1,5 +1,21 @@
 #include "board.h"
 
+void init_snake(struct Board *board, struct Snake *snake, const uint8_t init_size)
+{
+    snake->size = 0;
+    snake->dx = 0, snake->dy = 0;
+
+    for (uint8_t j = 0; j < init_size; j++)
+    {
+        if (board->width / 2 + j > board->width)
+        {
+            break;
+        }
+
+        add_body(snake, board->height / 2, board->width / 2 + j);
+    }
+}
+
 int main(int argc, char **argv)
 {
     assert(argc == 3);
@@ -15,18 +31,10 @@ int main(int argc, char **argv)
 
     struct Board *board = set_board(height, width);
     struct Snake *snake = (struct Snake *)malloc(sizeof(struct Snake));
+    init_snake(board, snake, 3);
 
-    snake->size = 0;
-    snake->dx = 0, snake->dy = 0;
-
-    add_body(snake, height / 2, width / 2);
-    add_body(snake, height / 2, width / 2 + 1);
-    add_body(snake, height / 2, width / 2 + 3);
-
-    int ch;
-    int decay = 100;
     bool stop;
-
+    int ch, decay = 100;
     int8_t dx = 0, dy = 1;
 
     initscr();
