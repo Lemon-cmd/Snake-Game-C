@@ -17,14 +17,13 @@ int main(int argc, char **argv)
     struct Snake *snake = (struct Snake *)malloc(sizeof(struct Snake));
 
     snake->size = 0;
-	snake->dx = 0, snake->dy = 0;
+    snake->dx = 0, snake->dy = 0;
 
     add_body(snake, height / 2, width / 2);
     add_body(snake, height / 2, width / 2 + 1);
-	add_body(snake, height / 2, width / 2 + 2);
 
     int ch;
-	bool stop;
+    bool stop;
 
     int8_t dx = 0, dy = 1;
 
@@ -68,17 +67,17 @@ int main(int argc, char **argv)
         move_snake(board, snake, dx, dy);
 
         usleep(200000);
-		if (collide(board, snake->head))
+        if (collide(board, snake->head))
         {
             stop = true;
             break;
         }
 
-		if (ate(board->food, snake->head))
-		{
-			add_body(snake, snake->tail->y, snake->tail->x);	
-			regen_food(board);
-		}
+        if (ate(board->food, snake->head))
+        {
+            add_body(snake, snake->tail->y, snake->tail->x);
+            regen_food(board);
+        }
 
         display(board, snake);
     }
@@ -92,7 +91,7 @@ int main(int argc, char **argv)
     {
         printf("Score: %u\n", snake->size - 3);
     }
-	
+
     fflush(stdout);
     free_board(board, snake);
 }
