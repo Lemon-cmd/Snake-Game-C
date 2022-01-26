@@ -65,7 +65,7 @@ void display_snake(const struct Snake *snake)
 {
     struct Body *current = snake->head;
 
-    for (uint16_t j = 0; j < snake->size - 1; j++)
+    for (uint32_t j = 0; j < snake->size - 1; j++)
     {
         printw("{%u, %u}, ", current->x, current->y);
         current = current->next;
