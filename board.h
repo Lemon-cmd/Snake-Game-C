@@ -21,6 +21,10 @@ struct Origin make_coord(const unsigned int y, const unsigned int x)
     return coord;
 }
 
+const int32_t randint(const int32_t min, const int32_t max) {
+    return rand() % (max - min) + min;
+}
+
 const float angle(const struct Origin pair1, const struct Origin pair2)
 {
     const float A = pair1.y - pair2.y;
@@ -50,10 +54,6 @@ void set_snake(const struct Board *board, const struct Snake *snake)
         board->screen[y][x] = 'O';
         current = current->next;
     }
-}
-
-void grow(struct Board *board, struct Snake *head)
-{
 }
 
 void move_snake(struct Board *board, struct Snake *snake, const int8_t dx, const int8_t dy)
@@ -96,6 +96,14 @@ void move_snake(struct Board *board, struct Snake *snake, const int8_t dx, const
     }
 }
 
+void regen_food(struct Board *board)
+{
+	int32_t nx = randint(0, board->width), ny = randint(0, board->height);
+	board->screen[board->food->y][board->food->x] = '.';
+	board->food->x = nx, board->food->y = ny;
+	board->screen[ny][nx] = 'X';
+}
+
 struct Board *set_board(const unsigned int height, const unsigned int width)
 {
 
@@ -104,6 +112,7 @@ struct Board *set_board(const unsigned int height, const unsigned int width)
     board->height = height;
     board->screen = (char **)calloc(height, sizeof(char *));
     board->food = (struct Origin *)malloc(sizeof(struct Origin));
+	board->food->x = width / 2, board->food->y = height / 2 + 2;
 
     for (unsigned int row = 0; row < height; row++)
     {
@@ -114,6 +123,8 @@ struct Board *set_board(const unsigned int height, const unsigned int width)
             board->screen[row][col] = '.';
         }
     }
+
+	board->screen[board->food->y][board->food->x] = 'X';
 
     return board;
 }

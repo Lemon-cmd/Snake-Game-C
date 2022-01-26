@@ -15,14 +15,18 @@ int main(int argc, char **argv)
 
     struct Board *board = set_board(height, width);
     struct Snake *snake = (struct Snake *)malloc(sizeof(struct Snake));
+
     snake->size = 0;
+	snake->dx = 0, snake->dy = 0;
 
     add_body(snake, height / 2, width / 2);
+    add_body(snake, height / 2, width / 2 + 1);
+	add_body(snake, height / 2, width / 2 + 2);
 
     int ch;
+	bool stop;
 
     int8_t dx = 0, dy = 1;
-    bool stop;
 
     initscr();
     noecho();
@@ -63,29 +67,32 @@ int main(int argc, char **argv)
 
         move_snake(board, snake, dx, dy);
 
-        sleep(1);
-        if (collide(board, snake->head))
+        usleep(200000);
+		if (collide(board, snake->head))
         {
             stop = true;
             break;
         }
+
+		if (ate(board->food, snake->head))
+		{
+			add_body(snake, snake->tail->y, snake->tail->x);	
+			regen_food(board);
+		}
 
         display(board, snake);
     }
 
     endwin();
 
-    // display(board, snake);
-    // display_snake(snake);
-
     // printf("%f\n", angle(make_coord(snake->head->y, snake->head->x), make_coord(snake->tail->y, snake->tail->x)));
     // printf("%s\n", collide(board, snake->tail) ? "True" : "False");
 
     if (stop)
     {
-        printf("You Lost!\n");
+        printf("Score: %u\n", snake->size - 3);
     }
-
+	
     fflush(stdout);
     free_board(board, snake);
 }
